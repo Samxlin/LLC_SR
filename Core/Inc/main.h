@@ -60,6 +60,7 @@ void Error_Handler(void);
 
 /* USER CODE BEGIN Private defines */
 extern int oledFlag;
+extern uint16_t ADC_ConvertedValue[3];
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

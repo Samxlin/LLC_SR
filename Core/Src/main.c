@@ -52,6 +52,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+uint16_t ADC_ConvertedValue[3] = {0,0,0};
 int oledFlag=0;
 /* USER CODE END PV */
 
@@ -117,6 +118,13 @@ int main(void)
 	HAL_HRTIM_WaveformOutputStart(&hhrtim1, HRTIM_OUTPUT_TE1 + HRTIM_OUTPUT_TE2);
 	HAL_HRTIM_WaveformOutputStart(&hhrtim1, HRTIM_OUTPUT_TF1 + HRTIM_OUTPUT_TF2);
 	
+	HAL_ADCEx_Calibration_Start(&hadc2,ADC_SINGLE_ENDED);
+	HAL_Delay(100);
+	
+	if(HAL_ADC_Start_DMA(&hadc2,(uint32_t *)&ADC_ConvertedValue,3) != HAL_OK)
+	{
+		Error_Handler();
+	}
 	
 	HAL_TIM_Base_Start_IT(&htim2); //200Hz
 	

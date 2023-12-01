@@ -641,7 +641,7 @@ void OLED_SHOW()
 	unsigned int dt1Dis[4]={0,0,0,0};
 	unsigned int dt2Dis[4]={0,0,0,0};	
 	unsigned int dt3Dis[4]={0,0,0,0};
-	unsigned int dt4Dis[4]={0,0,0,0};
+//	unsigned int dt4Dis[4]={0,0,0,0};
 	
 	freqDis[0] = (u8)(freq/1000);
 	freqDis[1] = (u8)((freq-(uint8_t)freqDis[0]*1000)/100);
@@ -663,25 +663,43 @@ void OLED_SHOW()
 	phiDis[2] = (u8)((phiDeg-(uint16_t)phiDis[0]*1000-(uint16_t)phiDis[1]*100)/10);
 	phiDis[3] = (u8)(phiDeg-(uint16_t)phiDis[0]*1000-(uint16_t)phiDis[1]*100-(uint16_t)phiDis[2]*10);	
 	
-	dt1Dis[0] = (u8)(dt1/1000);
-	dt1Dis[1] = (u8)((dt1-(uint8_t)dt1Dis[0]*1000)/100);
-	dt1Dis[2] = (u8)((dt1-(uint16_t)dt1Dis[0]*1000-(uint16_t)dt1Dis[1]*100)/10);
-	dt1Dis[3] = (u8)(dt1-(uint16_t)dt1Dis[0]*1000-(uint16_t)dt1Dis[1]*100-(uint16_t)dt1Dis[2]*10);	
+//	dt1Dis[0] = (u8)(dt1/1000);
+//	dt1Dis[1] = (u8)((dt1-(uint8_t)dt1Dis[0]*1000)/100);
+//	dt1Dis[2] = (u8)((dt1-(uint16_t)dt1Dis[0]*1000-(uint16_t)dt1Dis[1]*100)/10);
+//	dt1Dis[3] = (u8)(dt1-(uint16_t)dt1Dis[0]*1000-(uint16_t)dt1Dis[1]*100-(uint16_t)dt1Dis[2]*10);	
+//	
+//	dt2Dis[0] = (u8)(dt2/1000);
+//	dt2Dis[1] = (u8)((dt2-(uint8_t)dt2Dis[0]*1000)/100);
+//	dt2Dis[2] = (u8)((dt2-(uint16_t)dt2Dis[0]*1000-(uint16_t)dt2Dis[1]*100)/10);
+//	dt2Dis[3] = (u8)(dt2-(uint16_t)dt2Dis[0]*1000-(uint16_t)dt2Dis[1]*100-(uint16_t)dt2Dis[2]*10);	
+//	
+//	dt3Dis[0] = (u8)(dt3/1000);
+//	dt3Dis[1] = (u8)((dt3-(uint8_t)dt3Dis[0]*1000)/100);
+//	dt3Dis[2] = (u8)((dt3-(uint16_t)dt3Dis[0]*1000-(uint16_t)dt3Dis[1]*100)/10);
+//	dt3Dis[3] = (u8)(dt3-(uint16_t)dt3Dis[0]*1000-(uint16_t)dt3Dis[1]*100-(uint16_t)dt3Dis[2]*10);	
+//	
+//	dt4Dis[0] = (u8)(dt4/1000);
+//	dt4Dis[1] = (u8)((dt4-(uint8_t)dt4Dis[0]*1000)/100);
+//	dt4Dis[2] = (u8)((dt4-(uint16_t)dt4Dis[0]*1000-(uint16_t)dt4Dis[1]*100)/10);
+//	dt4Dis[3] = (u8)(dt4-(uint16_t)dt4Dis[0]*1000-(uint16_t)dt4Dis[1]*100-(uint16_t)dt2Dis[2]*10);	
 	
-	dt2Dis[0] = (u8)(dt2/1000);
-	dt2Dis[1] = (u8)((dt2-(uint8_t)dt2Dis[0]*1000)/100);
-	dt2Dis[2] = (u8)((dt2-(uint16_t)dt2Dis[0]*1000-(uint16_t)dt2Dis[1]*100)/10);
-	dt2Dis[3] = (u8)(dt2-(uint16_t)dt2Dis[0]*1000-(uint16_t)dt2Dis[1]*100-(uint16_t)dt2Dis[2]*10);	
+	//hall
+	dt1Dis[0] = (u8)(ADC_ConvertedValue[0]/1000);
+	dt1Dis[1] = (u8)((ADC_ConvertedValue[0]-(uint8_t)dt1Dis[0]*1000)/100);
+	dt1Dis[2] = (u8)((ADC_ConvertedValue[0]-(uint16_t)dt1Dis[0]*1000-(uint16_t)dt1Dis[1]*100)/10);
+	dt1Dis[3] = (u8)(ADC_ConvertedValue[0]-(uint16_t)dt1Dis[0]*1000-(uint16_t)dt1Dis[1]*100-(uint16_t)dt1Dis[2]*10);	
 	
-	dt3Dis[0] = (u8)(dt3/1000);
-	dt3Dis[1] = (u8)((dt3-(uint8_t)dt3Dis[0]*1000)/100);
-	dt3Dis[2] = (u8)((dt3-(uint16_t)dt3Dis[0]*1000-(uint16_t)dt3Dis[1]*100)/10);
-	dt3Dis[3] = (u8)(dt3-(uint16_t)dt3Dis[0]*1000-(uint16_t)dt3Dis[1]*100-(uint16_t)dt3Dis[2]*10);	
+	//shunt
+	dt2Dis[0] = (u8)(ADC_ConvertedValue[1]/1000);
+	dt2Dis[1] = (u8)((ADC_ConvertedValue[1]-(uint8_t)dt2Dis[0]*1000)/100);
+	dt2Dis[2] = (u8)((ADC_ConvertedValue[1]-(uint16_t)dt2Dis[0]*1000-(uint16_t)dt2Dis[1]*100)/10);
+	dt2Dis[3] = (u8)(ADC_ConvertedValue[1]-(uint16_t)dt2Dis[0]*1000-(uint16_t)dt2Dis[1]*100-(uint16_t)dt2Dis[2]*10);	
 	
-	dt4Dis[0] = (u8)(dt4/1000);
-	dt4Dis[1] = (u8)((dt4-(uint8_t)dt4Dis[0]*1000)/100);
-	dt4Dis[2] = (u8)((dt4-(uint16_t)dt4Dis[0]*1000-(uint16_t)dt4Dis[1]*100)/10);
-	dt4Dis[3] = (u8)(dt4-(uint16_t)dt4Dis[0]*1000-(uint16_t)dt4Dis[1]*100-(uint16_t)dt2Dis[2]*10);	
+	//µÁ—π 6.2k/(49.9k*2+6.2k)*4096/3.3=72.6
+	dt3Dis[0] = (u8)(ADC_ConvertedValue[2]/1000);
+	dt3Dis[1] = (u8)((ADC_ConvertedValue[2]-(uint8_t)dt3Dis[0]*1000)/100);
+	dt3Dis[2] = (u8)((ADC_ConvertedValue[2]-(uint16_t)dt3Dis[0]*1000-(uint16_t)dt3Dis[1]*100)/10);
+	dt3Dis[3] = (u8)(ADC_ConvertedValue[2]-(uint16_t)dt3Dis[0]*1000-(uint16_t)dt3Dis[1]*100-(uint16_t)dt3Dis[2]*10);	
 	
 	OLED_ShowStr(25,0,"MODE  :  DAB ",1);
 	OLED_ShowStr(10,2,"Freq  :  ",1);
@@ -728,9 +746,9 @@ void OLED_SHOW()
 	OLEDShowData(17,7,dt3Dis[1]);
 	OLEDShowData(24,7,dt3Dis[2]);
 	OLEDShowData(31,7,dt3Dis[3]);
-	
-	OLEDShowData(80,7,dt4Dis[0]);
-	OLEDShowData(87,7,dt4Dis[1]);
-	OLEDShowData(94,7,dt4Dis[2]);
-	OLEDShowData(101,7,dt4Dis[3]);
+//	
+//	OLEDShowData(80,7,dt4Dis[0]);
+//	OLEDShowData(87,7,dt4Dis[1]);
+//	OLEDShowData(94,7,dt4Dis[2]);
+//	OLEDShowData(101,7,dt4Dis[3]);
 }
