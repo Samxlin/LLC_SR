@@ -29,6 +29,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
+#include "oled.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -99,7 +100,10 @@ int main(void)
   MX_TIM2_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
-
+	OLED_Init();
+	OLED_CLS();
+	Draw_Logo1();
+	OLED_ON(); 
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -107,7 +111,8 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-
+		HAL_Delay(300);
+//		OLED_SHOW();
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
