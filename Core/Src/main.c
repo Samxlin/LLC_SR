@@ -31,7 +31,6 @@
 
 #include "oled.h"
 #include "key.h"
-#include "signalGen.h"
 
 /* USER CODE END Includes */
 
@@ -105,8 +104,22 @@ int main(void)
   /* USER CODE BEGIN 2 */
 	OLED_Init();
 	OLED_CLS();
-	Draw_Logo1();
+	//Draw_Logo1();
 	OLED_ON(); 
+	
+	KEY_Init();
+	
+	signal_init();
+	
+	HAL_HRTIM_WaveformCounterStart(&hhrtim1, HRTIM_TIMERID_MASTER|HRTIM_TIMERID_TIMER_A|HRTIM_TIMERID_TIMER_B|HRTIM_TIMERID_TIMER_E|HRTIM_TIMERID_TIMER_F);
+	HAL_HRTIM_WaveformOutputStart(&hhrtim1, HRTIM_OUTPUT_TA1 + HRTIM_OUTPUT_TA2);
+	HAL_HRTIM_WaveformOutputStart(&hhrtim1, HRTIM_OUTPUT_TB1 + HRTIM_OUTPUT_TB2);
+	HAL_HRTIM_WaveformOutputStart(&hhrtim1, HRTIM_OUTPUT_TE1 + HRTIM_OUTPUT_TE2);
+	HAL_HRTIM_WaveformOutputStart(&hhrtim1, HRTIM_OUTPUT_TF1 + HRTIM_OUTPUT_TF2);
+	
+	
+	HAL_TIM_Base_Start_IT(&htim2); //200Hz
+	
   /* USER CODE END 2 */
 
   /* Infinite loop */
