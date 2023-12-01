@@ -5,14 +5,14 @@
 #include "hrtim.h"
 #include "signalGen.h"
 
-#define KEY_1_Pin GPIO_PIN_3
-#define KEY_1_GPIO_Port GPIOC
-#define KEY_2_Pin GPIO_PIN_2
-#define KEY_2_GPIO_Port GPIOC
-#define KEY_3_Pin GPIO_PIN_1
-#define KEY_3_GPIO_Port GPIOC
-#define KEY_4_Pin GPIO_PIN_0
-#define KEY_4_GPIO_Port GPIOC
+#define KEY_1_Pin GPIO_PIN_4
+#define KEY_1_GPIO_Port GPIOA
+#define KEY_2_Pin GPIO_PIN_5
+#define KEY_2_GPIO_Port GPIOA
+#define KEY_3_Pin GPIO_PIN_6
+#define KEY_3_GPIO_Port GPIOA
+#define KEY_4_Pin GPIO_PIN_7
+#define KEY_4_GPIO_Port GPIOA
 
 #define varRate 1
 

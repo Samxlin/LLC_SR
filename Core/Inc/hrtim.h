@@ -36,6 +36,7 @@ extern HRTIM_HandleTypeDef hhrtim1;
 
 /* USER CODE BEGIN Private defines */
 
+#define deadTimeValue 136
 /* USER CODE END Private defines */
 
 void MX_HRTIM1_Init(void);

@@ -30,6 +30,9 @@
 /* USER CODE BEGIN Includes */
 
 #include "oled.h"
+#include "key.h"
+#include "signalGen.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -50,7 +53,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+int oledFlag=0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -111,8 +114,7 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-		HAL_Delay(300);
-//		OLED_SHOW();
+
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
