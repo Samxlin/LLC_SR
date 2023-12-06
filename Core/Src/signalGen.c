@@ -55,11 +55,11 @@ void signalCal(int freq, int sita1, int sita2, int phi, int dt1,int dt2, int dt3
 	
 	pDeadTimeCfg.RisingValue = dt3;
 	pDeadTimeCfg.FallingValue = dt4;
-  if (HAL_HRTIM_DeadTimeConfig(&hhrtim1, HRTIM_TIMERINDEX_TIMER_C, &pDeadTimeCfg) != HAL_OK)
+  if (HAL_HRTIM_DeadTimeConfig(&hhrtim1, HRTIM_TIMERINDEX_TIMER_E, &pDeadTimeCfg) != HAL_OK)
   {
     Error_Handler();
   }
-  if (HAL_HRTIM_DeadTimeConfig(&hhrtim1, HRTIM_TIMERINDEX_TIMER_D, &pDeadTimeCfg) != HAL_OK)
+  if (HAL_HRTIM_DeadTimeConfig(&hhrtim1, HRTIM_TIMERINDEX_TIMER_F, &pDeadTimeCfg) != HAL_OK)
   {
     Error_Handler();
   }
@@ -68,8 +68,8 @@ void signalCal(int freq, int sita1, int sita2, int phi, int dt1,int dt2, int dt3
 	
 	signalGen(300,HRTIM_TIMERINDEX_TIMER_A);
 	signalGen(300+sita1Cmp,HRTIM_TIMERINDEX_TIMER_B);
-	signalGen(300+phiCmp+(sita1Cmp-sita2Cmp)/2,HRTIM_TIMERINDEX_TIMER_C);
-	signalGen(300+phiCmp+(sita1Cmp+sita2Cmp)/2,HRTIM_TIMERINDEX_TIMER_D);
+	signalGen(300+phiCmp+(sita1Cmp-sita2Cmp)/2,HRTIM_TIMERINDEX_TIMER_E);
+	signalGen(300+phiCmp+(sita1Cmp+sita2Cmp)/2,HRTIM_TIMERINDEX_TIMER_F);
 }
 
 void signal_init()

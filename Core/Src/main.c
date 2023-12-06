@@ -19,6 +19,8 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "adc.h"
+#include "comp.h"
+#include "dac.h"
 #include "dma.h"
 #include "hrtim.h"
 #include "i2c.h"
@@ -102,6 +104,9 @@ int main(void)
   MX_I2C1_Init();
   MX_TIM2_Init();
   MX_USART2_UART_Init();
+  MX_COMP1_Init();
+  MX_COMP4_Init();
+  MX_DAC3_Init();
   /* USER CODE BEGIN 2 */
 	OLED_Init();
 	OLED_CLS();
