@@ -257,7 +257,7 @@ void HRTIM1_Master_IRQHandler(void)
   /* USER CODE BEGIN HRTIM1_Master_IRQn 1 */
 	__HAL_HRTIM_MASTER_CLEAR_IT(&hhrtim, HRTIM_MASTER_IT_MREP);
 	
-	int a=20;
+	static int a=20;
 	int cA=0,cB=0,b=0,cnt=0;
 	
 	cA=dt1-captured_valueA;

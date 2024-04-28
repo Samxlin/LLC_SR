@@ -111,20 +111,15 @@ int main(void)
 	
 	HAL_DAC_Start(&hdac1,DAC_CHANNEL_1);
 	HAL_DAC_Start(&hdac1,DAC_CHANNEL_2);
-	HAL_DAC_SetValue(&hdac1,DAC_CHANNEL_1,DAC_ALIGN_12B_R,1000);	//设置通道输出的值
-	HAL_DAC_SetValue(&hdac1,DAC_CHANNEL_2,DAC_ALIGN_12B_R,1000);	//设置通道输出的值
+	HAL_DAC_SetValue(&hdac1,DAC_CHANNEL_1,DAC_ALIGN_12B_R,200);	//设置通道输出的值
+	HAL_DAC_SetValue(&hdac1,DAC_CHANNEL_2,DAC_ALIGN_12B_R,200);	//设置通道输出的值
 	HAL_Delay(10);
 	
 	HAL_ADCEx_Calibration_Start(&hadc3,ADC_CALIB_OFFSET_LINEARITY,ADC_SINGLE_ENDED);
 	HAL_ADC_Start_DMA(&hadc3, (uint32_t *)adc3_data, ADC3_BUFFER_SIZE);
-
-	HAL_HRTIM_WaveformCounterStart(&hhrtim, HRTIM_TIMERID_TIMER_A|HRTIM_TIMERID_TIMER_B|HRTIM_TIMERID_TIMER_C);
-	HAL_HRTIM_WaveformOutputStart(&hhrtim, HRTIM_OUTPUT_TA1|HRTIM_OUTPUT_TA2|HRTIM_OUTPUT_TB1|HRTIM_OUTPUT_TB2|HRTIM_OUTPUT_TC1|HRTIM_OUTPUT_TC2);
-	
 		
 	HAL_TIM_Base_Start_IT(&htim2); //1000Hz
-	HAL_HRTIM_WaveformCounterStart_IT(&hhrtim, HRTIM_TIMERID_MASTER);
-	HAL_HRTIM_WaveformCounterStart_IT(&hhrtim, HRTIM_TIMERID_TIMER_A);
+	HAL_HRTIM_WaveformCounterStart_IT(&hhrtim, HRTIM_TIMERID_MASTER|HRTIM_TIMERID_TIMER_A|HRTIM_TIMERID_TIMER_B);
   /* USER CODE END 2 */
 
   /* Infinite loop */
