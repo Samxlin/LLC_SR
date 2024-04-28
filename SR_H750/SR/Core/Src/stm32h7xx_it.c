@@ -337,7 +337,6 @@ void HRTIM1_TIMB_IRQHandler(void)
   {
 		__HAL_HRTIM_TIMER_CLEAR_IT(&hhrtim, HRTIM_TIMERINDEX_TIMER_B, HRTIM_TIM_IT_CPT1);
 		captured_valueB = hhrtim.Instance->sTimerxRegs[HRTIM_TIMERINDEX_TIMER_B].CPT1xR;
-		//tset
 	
   }
   /* USER CODE END HRTIM1_TIMB_IRQn 1 */
