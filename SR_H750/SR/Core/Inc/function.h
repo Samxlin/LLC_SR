@@ -72,7 +72,7 @@ struct  _FLAG
 	uint8_t 	PWMENFlag;//启动标志位	
 	uint8_t 	KeyFlag1;//按键标志位
 	uint8_t 	KeyFlag2;//按键标志位	
-	uint8_t 	BBModeChange;//工作模式切换标志位
+	uint8_t 	SyncSuccessFlag;//同步成功标志位
 };
 
 //状态机枚举量
@@ -84,14 +84,6 @@ typedef enum
     Run,//正常运行
     Err//故障
 }STATE_M;
-
-//软启动枚举变量
-typedef enum
-{
-	SSInit,//软启初始化
-	SSWait,//软启等待
-	SSRun//开始软启
- } SState_M;
 
 #define clock 400000
 

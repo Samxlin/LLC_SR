@@ -5,9 +5,6 @@ struct  _ADI SADC={0,0,32768,0,0};//输入输出参数采样值和平均值
 
 struct  _FLAG	DF={0,0,0,0,0,0,0,0};//控制标志位
 
-//软启动状态标志位
-SState_M 	STState = SSInit ;
-
 unsigned int fullperiod,halfperiod;
 int freq,sitaDeg,dt1,dt2,delayComp;
 
@@ -127,8 +124,6 @@ void StateMWait(void)
 			IoutSum=0;
 			//状态标志位跳转至等待状态
 			DF.SMFlag  = Rise;
-			//软启动子状态跳转至初始化状态
-			STState = SSInit;
 		}
 	}
 	else//进行输入和输出电流1.65V偏置求平均
@@ -157,78 +152,10 @@ void StateMWait(void)
 #define MAX_SSCNT       100//等待100ms
 void StateMRise(void)
 {
-	//计时器
-	static  uint16_t  Cnt = 0;
-	//最大占空比限制计数器
-	static  uint16_t	MaxDutyCnt=0;
-
-	//判断软启状态
-	switch(STState)
+	if(DF.SyncSuccessFlag)
 	{
-		//初始化状态
-		case    SSInit:
-		{
-			//关闭PWM
-			DF.PWMENFlag=0;
-			HAL_HRTIM_WaveformOutputStop(&hhrtim, HRTIM_OUTPUT_TA1|HRTIM_OUTPUT_TA2); //关闭
-			HAL_HRTIM_WaveformOutputStop(&hhrtim, HRTIM_OUTPUT_TB1|HRTIM_OUTPUT_TB2); //关闭				
-			//软启中将运行限制占空比启动，从最小占空比开始启动
-//			CtrValue.BUCKMaxDuty  = MIN_BUKC_DUTY;
-			
-			//跳转至软启等待状态
-			STState = SSWait;
-
-			break;
-		}
-		//等待软启动状态
-		case    SSWait:
-		{
-			//计数器累加
-			Cnt++;
-			//等待100ms
-			if(Cnt> MAX_SSCNT)
-			{
-				//计数器清0
-				Cnt = 0;
-				//限制启动占空比
-//				CtrValue.BuckDuty = MIN_BUKC_DUTY;
-//				CtrValue.BUCKMaxDuty= MIN_BUKC_DUTY;
-				
-				//输出参考电压从一半开始启动，避免过冲
-//				CtrValue.Voref  = CtrValue.Voref >>1;
-				STState = SSRun;	//跳转至软启状态			
-			}
-			break;
-		}
-		//软启动状态
-		case    SSRun:
-		{
-			if(DF.PWMENFlag==0)
-			{
-				HAL_HRTIM_WaveformOutputStart(&hhrtim, HRTIM_OUTPUT_TA1|HRTIM_OUTPUT_TA2); //开启PWM输出和PWM计时器
-				HAL_HRTIM_WaveformOutputStart(&hhrtim, HRTIM_OUTPUT_TB1|HRTIM_OUTPUT_TB2); //开启PWM输出和PWM计时器		
-			}
-			//发波标志位置位
-			DF.PWMENFlag=1;
-			//最大占空比限制逐渐增加
-			MaxDutyCnt++;
-			//最大占空比限制累加
-//			CtrValue.BUCKMaxDuty = CtrValue.BUCKMaxDuty + MaxDutyCnt*10;
-			//累加到最大值
-//			if(CtrValue.BUCKMaxDuty > MAX_BUCK_DUTY)
-//				CtrValue.BUCKMaxDuty  = MAX_BUCK_DUTY ;
-//			
-//			if((CtrValue.BUCKMaxDuty==MAX_BUCK_DUTY)&&(CtrValue.BoostMaxDuty==MAX_BOOST_DUTY))			
-			{
-				//状态机跳转至运行状态
-				DF.SMFlag  = Run;
-				//软启动子状态跳转至初始化状态
-				STState = SSInit;	
-			}
-			break;
-		}
-		default:
-		break;
+		//状态机跳转至运行状态
+		DF.SMFlag  = Run;
 	}
 }
 /*

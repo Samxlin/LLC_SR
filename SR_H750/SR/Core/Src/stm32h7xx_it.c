@@ -22,9 +22,11 @@
 #include "stm32h7xx_it.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include <stdlib.h>
 #include "function.h"
 #include "key.h"
 #include "dac.h"
+#include "hrtim.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -232,8 +234,8 @@ void TIM2_IRQHandler(void)
 	
 	//输入输出采样
 	ADCSample();
-	//按键处理函数	
-//	Botton_Process();
+	//输入欠压保护
+	VinSwUVP();
 	//状态机函数
 	StateM();
 	//状态灯显示函数
@@ -254,9 +256,46 @@ void HRTIM1_Master_IRQHandler(void)
   //HAL_HRTIM_IRQHandler(&hhrtim,HRTIM_TIMERINDEX_MASTER);
   /* USER CODE BEGIN HRTIM1_Master_IRQn 1 */
 	__HAL_HRTIM_MASTER_CLEAR_IT(&hhrtim, HRTIM_MASTER_IT_MREP);
-	for(int i=0;i<2;i++)
+	
+	int a=20;
+	int cA=0,cB=0,b=0,cnt=0;
+	
+	cA=dt1-captured_valueA;
+	if(captured_valueA==1){
+			cA=0;
+	}
+	
+	cB=dt1-captured_valueA;;
+	if(captured_valueB==1){
+			cB=0;
+	}
+
+	b=abs(cA-cB);
+
+	if((cA==0)||(cB==0))
 	{
-		;
+			a=a+cA-cB;
+	}
+	else if((b>2)&&(b<=(dt1+1)))
+	{
+		{
+			a=a+cA-cB/abs(cA-cB);
+		}
+	}
+
+	a=a%400;
+	
+	__HAL_HRTIM_SetCompare(&hhrtim, HRTIM_TIMERINDEX_MASTER, HRTIM_COMPAREUNIT_1, a);	
+	__HAL_HRTIM_SetCompare(&hhrtim, HRTIM_TIMERINDEX_MASTER, HRTIM_COMPAREUNIT_2, a+200);
+			
+	if(b<2)
+	{
+		cnt++;
+		if(cnt>200)
+		{		
+			cnt=0;
+			DF.SyncSuccessFlag=1;
+		}
 	}
   /* USER CODE END HRTIM1_Master_IRQn 1 */
 }
@@ -298,6 +337,7 @@ void HRTIM1_TIMB_IRQHandler(void)
   {
 		__HAL_HRTIM_TIMER_CLEAR_IT(&hhrtim, HRTIM_TIMERINDEX_TIMER_B, HRTIM_TIM_IT_CPT1);
 		captured_valueB = hhrtim.Instance->sTimerxRegs[HRTIM_TIMERINDEX_TIMER_B].CPT1xR;
+		
   }
   /* USER CODE END HRTIM1_TIMB_IRQn 1 */
 }
