@@ -346,8 +346,8 @@ void SwOCP(void)
 **     Returns     : none
 ** ===================================================================
 */
-#define MIN_UVP_VAL    686//11.4V欠压保护 （11.4/68 ）*Q12
-#define MIN_UVP_VAL_RE  795//13.2V欠压保护恢复 （13.2/68）*Q12
+#define MIN_UVP_VAL    4000//3V欠压保护 
+#define MIN_UVP_VAL_RE  4500//3.3V欠压保护恢复 
 void VinSwUVP(void)
 {
 	//过压保护判据保持计数器定义
@@ -360,7 +360,7 @@ void VinSwUVP(void)
 		//条件保持计时
 		UVPCnt++;
 		//条件保持10ms
-		if(UVPCnt > 2)
+		if(UVPCnt > 20)
 		{
 			//计时器清零
 			UVPCnt=0;
@@ -424,7 +424,7 @@ void Phase_Update()
 	sitaCmp=sitaDeg*fullperiod/3600;
 	
 	__HAL_HRTIM_SetCompare(&hhrtim, HRTIM_TIMERINDEX_MASTER, HRTIM_COMPAREUNIT_1, baseCmp+sitaCmp);	
-	__HAL_HRTIM_SetCompare(&hhrtim, HRTIM_TIMERINDEX_MASTER, HRTIM_COMPAREUNIT_2, baseCmp-sitaCmp);
+	__HAL_HRTIM_SetCompare(&hhrtim, HRTIM_TIMERINDEX_MASTER, HRTIM_COMPAREUNIT_2, baseCmp+halfperiod-sitaCmp);
 }
 
 void Deadtime_Update()
@@ -441,8 +441,8 @@ void Delay_Update()
 {
 	__HAL_HRTIM_SetCompare(&hhrtim, HRTIM_TIMERINDEX_TIMER_A, HRTIM_COMPAREUNIT_1, fullperiod-delayComp);	
 	__HAL_HRTIM_SetCompare(&hhrtim, HRTIM_TIMERINDEX_TIMER_A, HRTIM_COMPAREUNIT_2, halfperiod-delayComp); 
-	__HAL_HRTIM_SetCompare(&hhrtim, HRTIM_TIMERINDEX_TIMER_B, HRTIM_COMPAREUNIT_1, halfperiod-delayComp);	
-	__HAL_HRTIM_SetCompare(&hhrtim, HRTIM_TIMERINDEX_TIMER_B, HRTIM_COMPAREUNIT_2, fullperiod-delayComp); 
+	__HAL_HRTIM_SetCompare(&hhrtim, HRTIM_TIMERINDEX_TIMER_B, HRTIM_COMPAREUNIT_1, fullperiod-delayComp);	
+	__HAL_HRTIM_SetCompare(&hhrtim, HRTIM_TIMERINDEX_TIMER_B, HRTIM_COMPAREUNIT_2, halfperiod-delayComp); 
 }
 
 void Signal_Init()

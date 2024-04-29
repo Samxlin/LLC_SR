@@ -105,6 +105,7 @@ int main(void)
 	KEY_Init(); //°´¼ü³õÊ¼»¯
 	
 	Signal_Init();
+	Output_Update();
 	
 	HAL_COMP_Start(&hcomp1);
 	HAL_COMP_Start(&hcomp2);
@@ -118,6 +119,8 @@ int main(void)
 	HAL_ADCEx_Calibration_Start(&hadc3,ADC_CALIB_OFFSET_LINEARITY,ADC_SINGLE_ENDED);
 	HAL_ADC_Start_DMA(&hadc3, (uint32_t *)adc3_data, ADC3_BUFFER_SIZE);
 		
+	HAL_HRTIM_WaveformCounterStart(&hhrtim, HRTIM_TIMERID_MASTER|HRTIM_TIMERID_TIMER_A|HRTIM_TIMERID_TIMER_B);
+		
 	HAL_TIM_Base_Start_IT(&htim2); //1000Hz
 	HAL_HRTIM_WaveformCounterStart_IT(&hhrtim, HRTIM_TIMERID_MASTER|HRTIM_TIMERID_TIMER_A|HRTIM_TIMERID_TIMER_B);
   /* USER CODE END 2 */
@@ -127,7 +130,7 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-		
+
     /* USER CODE BEGIN 3 */
 
   }

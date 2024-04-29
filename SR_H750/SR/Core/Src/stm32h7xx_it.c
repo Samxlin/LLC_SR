@@ -257,36 +257,35 @@ void HRTIM1_Master_IRQHandler(void)
   /* USER CODE BEGIN HRTIM1_Master_IRQn 1 */
 	__HAL_HRTIM_MASTER_CLEAR_IT(&hhrtim, HRTIM_MASTER_IT_MREP);
 	
-	static int a=20;
+	static int a=370;
 	int cA=0,cB=0,b=0,cnt=0;
 	
 	cA=dt1-captured_valueA;
-	if(captured_valueA==1){
+	if(captured_valueA==25){
 			cA=0;
 	}
 	
 	cB=dt1-captured_valueA;;
-	if(captured_valueB==1){
+	if(captured_valueB==25){
 			cB=0;
 	}
 
-	b=abs(cA-cB);
+	b=cB-cA;
+	if(cA>cB) b=cA-cB;
 
 	if((cA==0)||(cB==0))
 	{
-			a=a+cA-cB;
+			a=a+cB-cA;
 	}
-	else if((b>2)&&(b<=(dt1+1)))
+	else if((b>3)&&(b<=(dt1+1)))
 	{
-		{
-			a=a+cA-cB/abs(cA-cB);
-		}
+			a=a+(cB-cA)/b;
 	}
 
-	a=a%400;
+	a=a%400+400;
 	
-	__HAL_HRTIM_SetCompare(&hhrtim, HRTIM_TIMERINDEX_MASTER, HRTIM_COMPAREUNIT_1, a);	
-	__HAL_HRTIM_SetCompare(&hhrtim, HRTIM_TIMERINDEX_MASTER, HRTIM_COMPAREUNIT_2, a+200);
+	__HAL_HRTIM_SetCompare(&hhrtim, HRTIM_TIMERINDEX_MASTER, HRTIM_COMPAREUNIT_1, baseCmp+a);	
+	__HAL_HRTIM_SetCompare(&hhrtim, HRTIM_TIMERINDEX_MASTER, HRTIM_COMPAREUNIT_2, baseCmp+a+200);
 			
 	if(b<2)
 	{
@@ -306,19 +305,13 @@ void HRTIM1_Master_IRQHandler(void)
 void HRTIM1_TIMA_IRQHandler(void)
 {
   /* USER CODE BEGIN HRTIM1_TIMA_IRQn 0 */
-	uint32_t tisrflagsA = READ_REG(hhrtim.Instance->sTimerxRegs[HRTIM_TIMERINDEX_TIMER_A].TIMxISR);
+
   /* USER CODE END HRTIM1_TIMA_IRQn 0 */
   //HAL_HRTIM_IRQHandler(&hhrtim,HRTIM_TIMERINDEX_TIMER_A);
   /* USER CODE BEGIN HRTIM1_TIMA_IRQn 1 */
 
-	/* Timer capture 1 event */
-  if((uint32_t)(tisrflagsA & HRTIM_TIM_FLAG_CPT1) != (uint32_t)RESET)
-  {
-		__HAL_HRTIM_TIMER_CLEAR_IT(&hhrtim, HRTIM_TIMERINDEX_TIMER_A, HRTIM_TIM_IT_CPT1);
+  __HAL_HRTIM_TIMER_CLEAR_IT(&hhrtim, HRTIM_TIMERINDEX_TIMER_A, HRTIM_TIM_IT_CPT1);
 		captured_valueA = hhrtim.Instance->sTimerxRegs[HRTIM_TIMERINDEX_TIMER_A].CPT1xR;
-
-  }
-	
   /* USER CODE END HRTIM1_TIMA_IRQn 1 */
 }
 
@@ -328,17 +321,13 @@ void HRTIM1_TIMA_IRQHandler(void)
 void HRTIM1_TIMB_IRQHandler(void)
 {
   /* USER CODE BEGIN HRTIM1_TIMB_IRQn 0 */
-	uint32_t tisrflagsB = READ_REG(hhrtim.Instance->sTimerxRegs[HRTIM_TIMERINDEX_TIMER_B].TIMxISR);
+	
   /* USER CODE END HRTIM1_TIMB_IRQn 0 */
   //HAL_HRTIM_IRQHandler(&hhrtim,HRTIM_TIMERINDEX_TIMER_B);
   /* USER CODE BEGIN HRTIM1_TIMB_IRQn 1 */
 	/* Timer capture 1 event */
-  if((uint32_t)(tisrflagsB & HRTIM_TIM_FLAG_CPT1) != (uint32_t)RESET)
-  {
-		__HAL_HRTIM_TIMER_CLEAR_IT(&hhrtim, HRTIM_TIMERINDEX_TIMER_B, HRTIM_TIM_IT_CPT1);
+	__HAL_HRTIM_TIMER_CLEAR_IT(&hhrtim, HRTIM_TIMERINDEX_TIMER_B, HRTIM_TIM_IT_CPT1);
 		captured_valueB = hhrtim.Instance->sTimerxRegs[HRTIM_TIMERINDEX_TIMER_B].CPT1xR;
-	
-  }
   /* USER CODE END HRTIM1_TIMB_IRQn 1 */
 }
 

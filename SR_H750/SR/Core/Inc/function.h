@@ -89,7 +89,7 @@ typedef enum
 
 #define initFreq 1000
 #define initSitaDeg 0
-#define initDTCmp 12
+#define initDTCmp 20
 #define initDelayCmp 30
 
 #define initPeriod clock/initFreq
