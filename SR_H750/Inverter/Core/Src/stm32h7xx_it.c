@@ -60,12 +60,11 @@
 /* External variables --------------------------------------------------------*/
 extern DMA_HandleTypeDef hdma_adc3;
 extern HRTIM_HandleTypeDef hhrtim;
-extern TIM_HandleTypeDef htim1;
 extern TIM_HandleTypeDef htim2;
 /* USER CODE BEGIN EV */
 
-int captured_value1=0;
-int captured_value2=0;
+int captured_valueA=0;
+int captured_valueB=0;
 /* USER CODE END EV */
 
 /******************************************************************************/
@@ -221,21 +220,6 @@ void DMA1_Stream0_IRQHandler(void)
 }
 
 /**
-  * @brief This function handles TIM1 update interrupt.
-  */
-void TIM1_UP_IRQHandler(void)
-{
-  /* USER CODE BEGIN TIM1_UP_IRQn 0 */
-
-  /* USER CODE END TIM1_UP_IRQn 0 */
-  HAL_TIM_IRQHandler(&htim1);
-  /* USER CODE BEGIN TIM1_UP_IRQn 1 */
-	captured_value1 = hhrtim.Instance->sTimerxRegs[HRTIM_TIMERINDEX_TIMER_A].CPT1xR;
-	captured_value2 = hhrtim.Instance->sTimerxRegs[HRTIM_TIMERINDEX_TIMER_A].CPT2xR;
-  /* USER CODE END TIM1_UP_IRQn 1 */
-}
-
-/**
   * @brief This function handles TIM2 global interrupt.
   */
 void TIM2_IRQHandler(void)
@@ -250,13 +234,11 @@ void TIM2_IRQHandler(void)
 	OLEDShowCnt++;
 	//输入输出采样
 	ADCSample();
+	VinSwUVP();
 	//按键处理函数	
 	Botton_Process();
 	//状态机函数
 	StateM();
-	//DAC输出值更新
-//	HAL_DAC_SetValue(&hdac1,DAC_CHANNEL_1,DAC_ALIGN_12B_R,DAC1_OUT1_Value);
-//	HAL_DAC_SetValue(&hdac1,DAC_CHANNEL_2,DAC_ALIGN_12B_R,DAC1_OUT1_Value);
 	//状态灯显示函数
 	LEDShow();
 	//输出更新函数
@@ -272,7 +254,7 @@ void HRTIM1_Master_IRQHandler(void)
   /* USER CODE BEGIN HRTIM1_Master_IRQn 0 */
 
   /* USER CODE END HRTIM1_Master_IRQn 0 */
-  //HAL_HRTIM_IRQHandler(&hhrtim,HRTIM_TIMERINDEX_MASTER);
+  HAL_HRTIM_IRQHandler(&hhrtim,HRTIM_TIMERINDEX_MASTER);
   /* USER CODE BEGIN HRTIM1_Master_IRQn 1 */
 	__HAL_HRTIM_MASTER_CLEAR_IT(&hhrtim, HRTIM_MASTER_IT_MREP);
 	for(int i=0;i<2;i++)
@@ -280,6 +262,37 @@ void HRTIM1_Master_IRQHandler(void)
 		;
 	}
   /* USER CODE END HRTIM1_Master_IRQn 1 */
+}
+
+/**
+  * @brief This function handles HRTIM timer A global interrupt.
+  */
+void HRTIM1_TIMA_IRQHandler(void)
+{
+  /* USER CODE BEGIN HRTIM1_TIMA_IRQn 0 */
+
+  /* USER CODE END HRTIM1_TIMA_IRQn 0 */
+  //HAL_HRTIM_IRQHandler(&hhrtim,HRTIM_TIMERINDEX_TIMER_A);
+  /* USER CODE BEGIN HRTIM1_TIMA_IRQn 1 */
+			__HAL_HRTIM_TIMER_CLEAR_IT(&hhrtim, HRTIM_TIMERINDEX_TIMER_A, HRTIM_TIM_IT_CPT1);
+			captured_valueA = hhrtim.Instance->sTimerxRegs[HRTIM_TIMERINDEX_TIMER_A].CPT1xR;
+
+  /* USER CODE END HRTIM1_TIMA_IRQn 1 */
+}
+
+/**
+  * @brief This function handles HRTIM timer B global interrupt.
+  */
+void HRTIM1_TIMB_IRQHandler(void)
+{
+  /* USER CODE BEGIN HRTIM1_TIMB_IRQn 0 */
+	
+  /* USER CODE END HRTIM1_TIMB_IRQn 0 */
+  //HAL_HRTIM_IRQHandler(&hhrtim,HRTIM_TIMERINDEX_TIMER_B);
+  /* USER CODE BEGIN HRTIM1_TIMB_IRQn 1 */
+			__HAL_HRTIM_TIMER_CLEAR_IT(&hhrtim, HRTIM_TIMERINDEX_TIMER_B, HRTIM_TIM_IT_CPT1);
+			captured_valueB = hhrtim.Instance->sTimerxRegs[HRTIM_TIMERINDEX_TIMER_B].CPT1xR;
+  /* USER CODE END HRTIM1_TIMB_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */

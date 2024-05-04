@@ -98,7 +98,6 @@ int main(void)
   MX_COMP1_Init();
   MX_HRTIM_Init();
   MX_ADC3_Init();
-  MX_TIM1_Init();
   MX_I2C1_Init();
   MX_COMP2_Init();
   /* USER CODE BEGIN 2 */
@@ -122,12 +121,10 @@ int main(void)
 	HAL_ADC_Start_DMA(&hadc3, (uint32_t *)adc3_data, ADC3_BUFFER_SIZE);
 
 	HAL_HRTIM_WaveformCounterStart(&hhrtim, HRTIM_TIMERID_TIMER_A|HRTIM_TIMERID_TIMER_B|HRTIM_TIMERID_TIMER_C);
-	HAL_HRTIM_WaveformOutputStart(&hhrtim, HRTIM_OUTPUT_TA1|HRTIM_OUTPUT_TA2|HRTIM_OUTPUT_TB1|HRTIM_OUTPUT_TB2);
 	
-	HAL_TIM_Base_Start_IT(&htim1);
 	HAL_TIM_Base_Start_IT(&htim2); //1000Hz
 	HAL_HRTIM_WaveformCounterStart_IT(&hhrtim, HRTIM_TIMERID_MASTER);
-	HAL_HRTIM_WaveformCounterStart_IT(&hhrtim, HRTIM_TIMERID_TIMER_A);
+	HAL_HRTIM_WaveformCounterStart_IT(&hhrtim, HRTIM_TIMERID_TIMER_A|HRTIM_TIMERID_TIMER_B);
   /* USER CODE END 2 */
 
   /* Infinite loop */

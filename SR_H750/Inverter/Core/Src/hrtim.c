@@ -61,13 +61,11 @@ void MX_HRTIM_Init(void)
   pEventCfg.Polarity = HRTIM_EVENTPOLARITY_HIGH;
   pEventCfg.Sensitivity = HRTIM_EVENTSENSITIVITY_FALLINGEDGE;
   pEventCfg.FastMode = HRTIM_EVENTFASTMODE_DISABLE;
-  if (HAL_HRTIM_EventConfig(&hhrtim, HRTIM_EVENT_2, &pEventCfg) != HAL_OK)
+  if (HAL_HRTIM_EventConfig(&hhrtim, HRTIM_EVENT_1, &pEventCfg) != HAL_OK)
   {
     Error_Handler();
   }
-  pEventCfg.Sensitivity = HRTIM_EVENTSENSITIVITY_RISINGEDGE;
-  pEventCfg.Filter = HRTIM_EVENTFILTER_NONE;
-  if (HAL_HRTIM_EventConfig(&hhrtim, HRTIM_EVENT_7, &pEventCfg) != HAL_OK)
+  if (HAL_HRTIM_EventConfig(&hhrtim, HRTIM_EVENT_2, &pEventCfg) != HAL_OK)
   {
     Error_Handler();
   }
@@ -109,7 +107,7 @@ void MX_HRTIM_Init(void)
   {
     Error_Handler();
   }
-  pTimerCfg.InterruptRequests = HRTIM_TIM_IT_NONE;
+  pTimerCfg.InterruptRequests = HRTIM_TIM_IT_CPT1;
   pTimerCfg.DMARequests = HRTIM_TIM_DMA_NONE;
   pTimerCfg.PreloadEnable = HRTIM_PRELOAD_ENABLED;
   pTimerCfg.PushPull = HRTIM_TIMPUSHPULLMODE_DISABLED;
@@ -126,14 +124,6 @@ void MX_HRTIM_Init(void)
   }
   pTimerCfg.ResetTrigger = HRTIM_TIMRESETTRIGGER_MASTER_CMP2;
   if (HAL_HRTIM_WaveformTimerConfig(&hhrtim, HRTIM_TIMERINDEX_TIMER_B, &pTimerCfg) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  pTimerCfg.PreloadEnable = HRTIM_PRELOAD_DISABLED;
-  pTimerCfg.RepetitionUpdate = HRTIM_UPDATEONREPETITION_DISABLED;
-  pTimerCfg.DeadTimeInsertion = HRTIM_TIMDEADTIMEINSERTION_DISABLED;
-  pTimerCfg.ResetTrigger = HRTIM_TIMRESETTRIGGER_NONE;
-  if (HAL_HRTIM_WaveformTimerConfig(&hhrtim, HRTIM_TIMERINDEX_TIMER_C, &pTimerCfg) != HAL_OK)
   {
     Error_Handler();
   }
@@ -155,17 +145,22 @@ void MX_HRTIM_Init(void)
   {
     Error_Handler();
   }
+  pCompareCfg.CompareValue = 30;
+  if (HAL_HRTIM_WaveformCompareConfig(&hhrtim, HRTIM_TIMERINDEX_TIMER_A, HRTIM_COMPAREUNIT_3, &pCompareCfg) != HAL_OK)
+  {
+    Error_Handler();
+  }
   pCaptureCfg.Trigger = HRTIM_CAPTURETRIGGER_EEV_2;
   if (HAL_HRTIM_WaveformCaptureConfig(&hhrtim, HRTIM_TIMERINDEX_TIMER_A, HRTIM_CAPTUREUNIT_1, &pCaptureCfg) != HAL_OK)
   {
     Error_Handler();
   }
-  pCaptureCfg.Trigger = HRTIM_CAPTURETRIGGER_EEV_7;
-  if (HAL_HRTIM_WaveformCaptureConfig(&hhrtim, HRTIM_TIMERINDEX_TIMER_A, HRTIM_CAPTUREUNIT_2, &pCaptureCfg) != HAL_OK)
+  pCaptureCfg.Trigger = HRTIM_CAPTURETRIGGER_EEV_1;
+  if (HAL_HRTIM_WaveformCaptureConfig(&hhrtim, HRTIM_TIMERINDEX_TIMER_B, HRTIM_CAPTUREUNIT_1, &pCaptureCfg) != HAL_OK)
   {
     Error_Handler();
   }
-  pTimerEventFilteringCfg.Filter = HRTIM_TIMEVENTFILTER_NONE;
+  pTimerEventFilteringCfg.Filter = HRTIM_TIMEVENTFILTER_WINDOWINGCMP3;
   pTimerEventFilteringCfg.Latch = HRTIM_TIMEVENTLATCH_DISABLED;
   if (HAL_HRTIM_TimerEventFilteringConfig(&hhrtim, HRTIM_TIMERINDEX_TIMER_A, HRTIM_EVENT_2, &pTimerEventFilteringCfg) != HAL_OK)
   {
@@ -223,7 +218,8 @@ void MX_HRTIM_Init(void)
   {
     Error_Handler();
   }
-  if (HAL_HRTIM_TimeBaseConfig(&hhrtim, HRTIM_TIMERINDEX_TIMER_C, &pTimeBaseCfg) != HAL_OK)
+  pCompareCfg.CompareValue = 30;
+  if (HAL_HRTIM_WaveformCompareConfig(&hhrtim, HRTIM_TIMERINDEX_TIMER_B, HRTIM_COMPAREUNIT_3, &pCompareCfg) != HAL_OK)
   {
     Error_Handler();
   }
@@ -257,8 +253,12 @@ void HAL_HRTIM_MspInit(HRTIM_HandleTypeDef* hrtimHandle)
     __HAL_RCC_HRTIM1_CLK_ENABLE();
 
     /* HRTIM1 interrupt Init */
-    HAL_NVIC_SetPriority(HRTIM1_Master_IRQn, 0, 0);
+    HAL_NVIC_SetPriority(HRTIM1_Master_IRQn, 1, 0);
     HAL_NVIC_EnableIRQ(HRTIM1_Master_IRQn);
+    HAL_NVIC_SetPriority(HRTIM1_TIMA_IRQn, 0, 0);
+    HAL_NVIC_EnableIRQ(HRTIM1_TIMA_IRQn);
+    HAL_NVIC_SetPriority(HRTIM1_TIMB_IRQn, 0, 0);
+    HAL_NVIC_EnableIRQ(HRTIM1_TIMB_IRQn);
   /* USER CODE BEGIN HRTIM1_MspInit 1 */
 
   /* USER CODE END HRTIM1_MspInit 1 */
@@ -317,6 +317,8 @@ void HAL_HRTIM_MspDeInit(HRTIM_HandleTypeDef* hrtimHandle)
 
     /* HRTIM1 interrupt Deinit */
     HAL_NVIC_DisableIRQ(HRTIM1_Master_IRQn);
+    HAL_NVIC_DisableIRQ(HRTIM1_TIMA_IRQn);
+    HAL_NVIC_DisableIRQ(HRTIM1_TIMB_IRQn);
   /* USER CODE BEGIN HRTIM1_MspDeInit 1 */
 
   /* USER CODE END HRTIM1_MspDeInit 1 */

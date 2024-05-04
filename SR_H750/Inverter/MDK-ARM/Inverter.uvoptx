@@ -213,22 +213,12 @@
         <Ww>
           <count>11</count>
           <WinNumber>1</WinNumber>
-          <ItemText>OLEDShowCnt,0x0A</ItemText>
+          <ItemText>captured_valueA,0x0A</ItemText>
         </Ww>
         <Ww>
           <count>12</count>
           <WinNumber>1</WinNumber>
-          <ItemText>captured_value1,0x0A</ItemText>
-        </Ww>
-        <Ww>
-          <count>13</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>captured_value2,0x0A</ItemText>
-        </Ww>
-        <Ww>
-          <count>14</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>hhrtim</ItemText>
+          <ItemText>captured_valueB,0x0A</ItemText>
         </Ww>
       </WatchWindow1>
       <Tracepoint>
